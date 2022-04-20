@@ -1,0 +1,4 @@
+.ipynb_checkpoints
+.ipynb_checkpoints/*
+/assets/articles.csv
+assets/articles.csv
