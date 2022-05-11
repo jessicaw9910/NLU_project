@@ -10,6 +10,9 @@ from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 
 def save_abstracts(df_input, drug=None, tcga=None, abstract_list=None,
                    tool="PubMedSearcher", email="jwh4001@med.cornell.edu", first_pass=False):
+
+    pubmed = PubMed(tool="PubMedSearcher", email=email)
+    
     ## only run the first time
     if first_pass:
         abstract_list = []
