@@ -212,3 +212,37 @@ def save_stats(trainer, path):
 
   df_summary = pd.DataFrame(summary_stats, index=[0])
   df_summary.to_csv (path + '/df_summary.csv', index = False, header=True)
+
+
+def aggregate_metrics(path):
+  metric_list = os.listdir(path)
+  # print(metric_list)
+
+  df_eval = pd.DataFrame()
+  df_train = pd.DataFrame()
+  df_summary = pd.DataFrame()
+
+  for metric in metric_list:
+    ## get relevant file
+    df = pd.read_csv(path + '/' + metric)
+
+    ## extract file source info
+    source = metric.split('_df')[0]
+    df['source'] = source
+
+    ## add to relevant dataframe
+    if 'summary' in metric:
+      df_summary = pd.concat([df_summary, df], ignore_index=True)
+    if 'eval' in metric:
+      df_eval = pd.concat([df_eval, df], ignore_index=True)
+    if 'train' in metric:
+      df_train = pd.concat([df_train, df], ignore_index=True)
+
+  dfs = [df_summary, df_train, df_train]
+  for df in dfs:
+      # df['model'] = [i[0] for i in list(df_train['source'].str.split('_'))]
+      df['model'] = df['source'].apply(lambda x: x.split('_')[0])    
+      df['max_length'] = df['source'].apply(lambda x: int(x.split('_')[1]))
+      df.sort_values('max_length').sort_values('model', inplace=True)
+
+  return df_summary, df_eval, df_train
