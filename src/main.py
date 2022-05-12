@@ -88,7 +88,10 @@ def main(args):
         eval_dataset=dataset_val             
     )
 
-    trainer.train(resume_from_checkpoint=args.loadfromfile)
+    try:
+        trainer.train(resume_from_checkpoint=True)
+    except:
+        trainer.train()
 
     save_stats(trainer, path)
 
@@ -111,7 +114,7 @@ def parsearg_utils():
     parser.add_argument('-s','--savelim', help='Save total limit (int)', default=2, type=int)
     parser.add_argument('-b','--loadbest', help='Load best model at end (bool)', default=True, type=bool)
     parser.add_argument('-g','--loggingsteps', help='Logging steps (int)', default=100, type=int)
-    parser.add_argument('-f','--loadfromfile', help='Load model from checkpoint (bool)', default=False, type=bool)
+    # parser.add_argument('-f','--loadfromfile', help='Load model from checkpoint (bool)', default=False, type=bool)
 
     args = parser.parse_args()
 
